@@ -12,20 +12,40 @@ class CartItem extends React.Component {
     }
     increasecounter=()=>
     {
-    // 1st way->this.setState({Qty:this.state.Qty+1})
-    this.setState((prevState)=>{
-        return {Qty:prevState.Qty+1 }
-    })
+    this.setState( (prev)=>{
+        return{Qty:prev.Qty+1 }
+    },()=>{console.log(this.state)}
+    );
     }
     decreasecounter=()=>
-    {
+    {  const {Qty}=this.state
+        if(Qty>0)
+        {
         this.setState((prevState)=>{
             return {Qty:prevState.Qty-1}
-        })
+        }) 
     }
-    render() {
+}
+    // testing()
+    // {
+    //     var promise=new Promise((resolve,reject)=>{
+    //     setTimeout(() => {
+    //         resolve();
+    //     }, 500);});
+    //     promise.then(()=>{
+    //         this.setState((prevState)=>{
+    //             return {Qty:prevState.Qty+1}
+    //         })
+    //         console.log(this.state)
+    //     })
+       
+
+    // }
+    
+    render() { console.log("render")
         const { price, title, Qty } = this.state;
         return (
+             
             <div className="cart-item" >
                 <div className="left-block">
                     <img style={style.images} />
