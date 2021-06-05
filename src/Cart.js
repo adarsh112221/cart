@@ -48,6 +48,14 @@ class Cart extends React.Component {
             products
         })
     }
+    deletethis=(id)=>
+    {
+        const{products}=this.state; 
+        const yenahi=products.filter((item)=>item.id !== id);
+        this.setState({
+            products:yenahi
+        })
+    }
    
        
     
@@ -62,7 +70,7 @@ class Cart extends React.Component {
                 {
                 products.map((products)=>
                 {
-                    return <CartItem product={products} key={products.id} Onincreasecounter={this.increasecounter} Ondecreasecounter={this.decreasecounter}/>
+                    return <CartItem product={products} key={products.id} Onincreasecounter={this.increasecounter} Ondecreasecounter={this.decreasecounter} deletee={this.deletethis}/>
                 })
                 }
             </div>
