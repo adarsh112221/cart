@@ -28,7 +28,27 @@ class Cart extends React.Component {
         }
     }
 
-        
+    increasecounter=(x)=>
+    {
+   const{products}=this.state
+   const index=products.indexOf(x);
+   products[index].Qty+=1;
+   this.setState({
+    products
+    })
+   
+    }
+    decreasecounter=(x)=>
+    {
+        const{products}=this.state; 
+        const index=products.indexOf(x);
+        if(products[index].Qty>0)
+        products[index].Qty-=1;
+        this.setState({
+            products
+        })
+    }
+   
        
     
 
@@ -42,7 +62,7 @@ class Cart extends React.Component {
                 {
                 products.map((products)=>
                 {
-                    return <CartItem product={products} key={products.id} jsx={<h1>test</h1>}/>
+                    return <CartItem product={products} key={products.id} Onincreasecounter={this.increasecounter} Ondecreasecounter={this.decreasecounter}/>
                 })
                 }
             </div>
