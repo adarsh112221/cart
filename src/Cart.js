@@ -14,6 +14,8 @@ const Cart=(props)=>{
                     return <CartItem product={products} key={products.id} Onincreasecounter={props.Onincreasecounter} Ondecreasecounter={props.Ondecreasecounter} deletee={props.deletee}/>
                 })
                 }
+               <div style={{padding:10,fontSize:25}}>Total:{props.total()}
+                </div>
             </div>
         );
     }

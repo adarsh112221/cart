@@ -3,14 +3,14 @@ const CartItem=(props)=> {
  
     
     
-    const { price, title, Qty } = props.product;
+    const { price, title, Qty,img} = props.product;
     const{Onincreasecounter,Ondecreasecounter,product,deletee}=props
         return (
              
             <div className="cart-item" >
           
                 <div className="left-block">
-                    <img style={style.images} />
+                    <img style={style.images} src={product.img} alt={'abcd'}/>
                 </div>
                 <div className="right-block">
                     <div style={{ color: '#ccc', fontSize: 25 }}> {title}</div>
@@ -32,7 +32,8 @@ const style = {
         height: 150,
         width: 150,
         borderRadius: 4,
-        background: '#ccc'
+        background: '#ccc',
+        objectFit: "cover"
     }
 
 }
