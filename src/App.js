@@ -14,8 +14,8 @@ class App extends React.Component {
 componentDidMount()
 {
   this.db.
-  collection('products').
-  onSnapshot((snapshot)=>{
+  collection('products').where('price','>=',70000).
+ orderBy('price','asc').onSnapshot((snapshot)=>{
     const products=snapshot.docs.map((doc)=>{
        const data=doc.data();
        data['id']=doc.id;
@@ -32,9 +32,17 @@ increasecounter=(x)=>
 {
 const{products}=this.state
 const index=products.indexOf(x);
-products[index].Qty+=1;
-this.setState({
-products
+// products[index].Qty+=1;
+// this.setState({
+// products
+// })
+const docref=this.db.collection('products').doc(products[index].id);
+docref.update({
+  Qty:products[index].Qty+1
+}).then(()=>{
+  console.log("updated successfully")
+}).catch((error)=>{
+  console.log('error',error)
 })
 
 }
@@ -42,18 +50,31 @@ decreasecounter=(x)=>
 {
     const{products}=this.state; 
     const index=products.indexOf(x);
+    const docref=this.db.collection('products').doc(products[index].id);
     if(products[index].Qty>0)
-    products[index].Qty-=1;
-    this.setState({
-        products
+    {
+    docref.update({
+      Qty:products[index].Qty-1
+    }).then(()=>{
+      console.log("updated successfully")
+    }).catch((error)=>{
+      console.log('error',error)
     })
+  }
 }
 deletethis=(id)=>
 {
-    const{products}=this.state; 
-    const yenahi=products.filter((item)=>item.id !== id);
-    this.setState({
-        products:yenahi
+    
+    // const yenahi=products.filter((item)=>item.id !== id);
+    // this.setState({
+    //     products:yenahi
+    // })
+
+    const docref=this.db.collection('products').doc(id);
+    docref.delete().then(()=>{
+      console.log("deleted successfully")
+    }).catch((error)=>{
+     console.log('error',error)
     })
 }
 getcounts=()=>
@@ -95,7 +116,7 @@ render()
     
     <div className="App">
       <Navbar  count={this.getcounts()}/>
-      <button onClick={this.addproduct} style={{padding:20,fontSize:15,borderradius:4,margin:10}}>Add Product</button>
+      {/* <button onClick={this.addproduct} style={{padding:20,fontSize:15,borderradius:4,margin:10}}>Add Product</button> */}
       {loading&&<h1>Loading Products...</h1>}
       <Cart products={products} Onincreasecounter={this.increasecounter} Ondecreasecounter={this.decreasecounter} deletee={this.deletethis}
       total={this.total}/>
