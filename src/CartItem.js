@@ -3,7 +3,7 @@ const CartItem=(props)=> {
  
     
     
-    const { price, title, Qty,img} = props.product;
+    const { price, title, Qty} = props.product;
     const{Onincreasecounter,Ondecreasecounter,product,deletee}=props
         return (
              

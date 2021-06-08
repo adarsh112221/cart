@@ -1,34 +1,33 @@
 import React from 'react'
 import Cart from './Cart'
 import Navbar from './Navbar'
+import firebase from 'firebase/app'
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-        products: [{
-        price: 999,
-        title: 'watch',
-        Qty: 1,
-        img:'https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=989&q=80',
-        id:1
-    },
-    {
-         price: 999,
-         title: 'TV',
-         Qty: 1,
-         img:'https://images.unsplash.com/flagged/photo-1572609239482-d3a83f976aa0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=889&q=80',
-         id:2
-    },
-    {
-        price: 9999,
-        title: 'phone',
-        Qty: 1,
-        img:'https://images.unsplash.com/photo-1537589376225-5405c60a5bd8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
-        id:3
-    }]
+        products: [],
+        loading:true
     }
+    this.db=firebase.firestore();
 }
-
+componentDidMount()
+{
+  this.db.
+  collection('products').
+  onSnapshot((snapshot)=>{
+    const products=snapshot.docs.map((doc)=>{
+       const data=doc.data();
+       data['id']=doc.id;
+       return data;
+    })
+    this.setState({
+      products:products,
+      loading:false
+        })
+  })
+ 
+}
 increasecounter=(x)=>
 {
 const{products}=this.state
@@ -67,22 +66,41 @@ getcounts=()=>
   return count;
 
 }
+addproduct=()=>
+{
+  this.db.collection('products').add({
+    img:'https://th.bing.com/th/id/R0906f9da4ecc19d410e8ca9debcb998a?rik=wO6EobG6ZNSS5g&riu=http%3a%2f%2fchristinefriar.com%2fwp-content%2fuploads%2f2016%2f12%2fwashing-machine.jpg&ehk=J6ZuubaQ%2bDcXw8db7%2b2cZAsqYKwBhq6QsmroTdHrVy0%3d&risl=&pid=ImgRaw',
+    price:999,
+    Qty:3,
+    title:'Washing Machine'
+  }).then((docref)=>{
+    console.log('product have been added',docref)
+  }).catch((error)=>{
+    console.log('error',error)
+  })
+
+}
 total=()=>
 {
   const{products}=this.state; 
   let totalprice=0;
-  products.map( (product)=>{totalprice+=product.Qty*product.price})
+  products.map( (product)=>{totalprice+=product.Qty*product.price
+  return ''})
   return totalprice;
 }
 render()
 {
-  const{products}=this.state;
+  const{products,loading}=this.state;
   return (
+    
     <div className="App">
       <Navbar  count={this.getcounts()}/>
+      <button onClick={this.addproduct} style={{padding:20,fontSize:15,borderradius:4,margin:10}}>Add Product</button>
+      {loading&&<h1>Loading Products...</h1>}
       <Cart products={products} Onincreasecounter={this.increasecounter} Ondecreasecounter={this.decreasecounter} deletee={this.deletethis}
       total={this.total}/>
     </div>
+   
   );
 }
 
